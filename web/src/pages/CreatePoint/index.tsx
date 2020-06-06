@@ -2,6 +2,7 @@ import React, { useEffect, useState, ChangeEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { FiArrowLeft } from 'react-icons/fi';
 import { Map, TileLayer, Marker } from 'react-leaflet';
+import { LeafletMouseEvent } from 'leaflet';
 
 import api from '../../services/api';
 
@@ -28,8 +29,24 @@ const CreatePoint = () => {
   const [ufs, setUfds] = useState<string[]>([]);
   const [cities, setCities] = useState<string[]>([]);
 
+  const [initialPosition, setInitialPosition] = useState<[number, number]>([0, 0]);
+
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    whatsapp: '',
+  });
+
   const [selectedUf, setSelectedUf] = useState('0');
   const [selectedCity, setSelectedCity] = useState('0');
+  const [selectedPosition, setSelectedPosition] = useState<[number, number]>([0, 0]);
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition((position) => {
+      const { latitude, longitude } = position.coords;
+      setInitialPosition([latitude, longitude]);
+    });
+  }, []);
 
   useEffect(() => {
     api.get('/items').then((response) => {
@@ -72,6 +89,18 @@ const CreatePoint = () => {
     setSelectedCity(city);
   }
 
+  function sethandleMapClick(event: LeafletMouseEvent) {
+    setSelectedPosition([event.latlng.lat, event.latlng.lng]);
+  }
+
+  function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
+    console.log(event);
+    const { name, value } = event.target;
+
+    setFormData({ ...formData, [name]: value });
+    console.log(formData);
+  }
+
   return (
     <div id="page-create-point">
       <header>
@@ -95,17 +124,17 @@ const CreatePoint = () => {
 
           <div className="field">
             <label htmlFor="name">Nome da entidade</label>
-            <input type="text" name="name" id="name" />
+            <input type="text" name="name" id="name" onChange={handleInputChange} />
           </div>
 
           <div className="field-group">
             <div className="field">
               <label htmlFor="name">E-mail</label>
-              <input type="email" name="email" id="email" />
+              <input type="email" name="email" id="email" onChange={handleInputChange} />
             </div>
             <div className="field">
               <label htmlFor="name">whatsapp</label>
-              <input type="text" name="whatsapp" id="whatsapp" />
+              <input type="text" name="whatsapp" id="whatsapp" onChange={handleInputChange} />
             </div>
           </div>
         </fieldset>
@@ -116,13 +145,13 @@ const CreatePoint = () => {
             <span>Selecione o endereço no mapa</span>
           </legend>
 
-          <Map center={[-23.981558, -46.2119957]} zoom={15}>
+          <Map center={initialPosition} zoom={15} onClick={sethandleMapClick}>
             <TileLayer
               attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
 
-            <Marker position={[-23.981558, -46.2119957]} />
+            <Marker position={selectedPosition} />
           </Map>
 
           <div className="field-group">
