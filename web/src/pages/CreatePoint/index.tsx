@@ -7,6 +7,7 @@ import api from '../../services/api';
 
 import './styles.css';
 import logo from '../../assets/logo.svg';
+import Axios from 'axios';
 
 interface Item {
   id: number;
@@ -14,13 +15,27 @@ interface Item {
   image_url: string;
 }
 
+interface IBGEResponse {
+  sigla: string;
+}
+
 const CreatePoint = () => {
   const [items, setItems] = useState<Item[]>([]);
+  const [ufs, setUfds] = useState<string[]>([]);
 
   useEffect(() => {
     api.get('/items').then((response) => {
       setItems(response.data);
     });
+  }, []);
+
+  useEffect(() => {
+    Axios.get<IBGEResponse[]>('https://servicodados.ibge.gov.br/api/v1/localidades/estados').then(
+      (response) => {
+        const ufInitials = response.data.map((uf) => uf.sigla);
+        setUfds(ufInitials);
+      }
+    );
   }, []);
 
   return (
@@ -81,6 +96,9 @@ const CreatePoint = () => {
               <label htmlFor="uf">Estado (UF)</label>
               <select name="uf" id="uf">
                 <option value="0">Selecione uma UF</option>
+                {ufs.map((uf) => (
+                  <option value={uf}>{uf}</option>
+                ))}
               </select>
             </div>
 
