@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Constants from 'expo-constants';
 
 import { SvgUri } from 'react-native-svg';
@@ -6,8 +6,23 @@ import { View, StyleSheet, Image, TouchableOpacity, Text, ScrollView } from 'rea
 import { Feather as Icon } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import MapView, { Marker } from 'react-native-maps';
+import api from '../../services/api';
+
+interface Item {
+  id: number;
+  title: string;
+  image_url: string;
+}
 
 export default function Points() {
+  const [items, setItems] = useState<Item[]>([]);
+
+  useEffect(() => {
+    api.get('items').then((response) => {
+      setItems(response.data);
+    });
+  }, []);
+
   const navigation = useNavigation();
 
   function handleNavigateBack() {
@@ -62,29 +77,12 @@ export default function Points() {
       </View>
       <View style={styles.itemsContainer}>
         <ScrollView horizontal contentContainerStyle={{ paddingHorizontal: 20 }}>
-          <TouchableOpacity style={styles.item} onPress={() => {}}>
-            <SvgUri width={42} height={42} uri="http://localhost:3333/uploads/baterias.svg" />
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.item} onPress={() => {}}>
-            <SvgUri width={42} height={42} uri="http://localhost:3333/uploads/baterias.svg" />
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.item} onPress={() => {}}>
-            <SvgUri width={42} height={42} uri="http://localhost:3333/uploads/baterias.svg" />
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.item} onPress={() => {}}>
-            <SvgUri width={42} height={42} uri="http://localhost:3333/uploads/baterias.svg" />
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.item} onPress={() => {}}>
-            <SvgUri width={42} height={42} uri="http://localhost:3333/uploads/baterias.svg" />
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.item} onPress={() => {}}>
-            <SvgUri width={42} height={42} uri="http://localhost:3333/uploads/baterias.svg" />
-          </TouchableOpacity>
+          {items.map((item) => (
+            <TouchableOpacity style={styles.item} onPress={() => {}}>
+              <SvgUri width={42} height={42} uri={item.image_url} />
+              <Text style={styles.itemTitle}>{item.title}</Text>
+            </TouchableOpacity>
+          ))}
         </ScrollView>
       </View>
     </>
