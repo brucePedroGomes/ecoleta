@@ -24,15 +24,14 @@ export default function Home() {
         <Text style={styles.description}>
           Ajudamos pessoas a encontrarem pontos de coleta de forma eficiente
         </Text>
-
-        <View style={styles.footer}>
-          <RectButton style={styles.button} onPress={handleNavigateToPoints}>
-            <View style={styles.buttonIcon}>
-              <Feather name="arrow-right" color="#FFF" size={24} />
-            </View>
-            <Text style={styles.buttonText}>Entrar</Text>
-          </RectButton>
-        </View>
+      </View>
+      <View style={styles.footer}>
+        <RectButton style={styles.button} onPress={handleNavigateToPoints}>
+          <View style={styles.buttonIcon}>
+            <Feather name="arrow-right" color="#FFF" size={24} />
+          </View>
+          <Text style={styles.buttonText}>Entrar</Text>
+        </RectButton>
       </View>
     </ImageBackground>
   );

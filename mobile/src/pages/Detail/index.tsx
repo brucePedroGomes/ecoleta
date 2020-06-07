@@ -1,15 +1,52 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import Constants from 'expo-constants';
+
+import { View, StyleSheet, TouchableOpacity, Image, Text } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { Feather as Icon } from '@expo/vector-icons';
+import { RectButton } from 'react-native-gesture-handler';
 
 export default function Detail() {
-  return <View />;
+  const navigation = useNavigation();
+  function handleNavigateBack() {
+    navigation.goBack();
+  }
+
+  return (
+    <>
+      <View style={styles.container}>
+        <TouchableOpacity onPress={handleNavigateBack}>
+          <Icon name="arrow-left" size={20} color="#34cb79" />
+        </TouchableOpacity>
+
+        <Image
+          source={{
+            uri:
+              'https://images.unsplash.com/photo-1583932644465-85803c7ed8ae?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=768&q=60',
+          }}
+          style={styles.pointImage}
+        />
+
+        <Text style={styles.pointName}>Mercadao do TioJAO</Text>
+        <Text style={styles.pointItems}>Lampadas,oleo</Text>
+
+        <View style={styles.address}>
+          <Text style={styles.addressTitle}>Endereco</Text>
+          <Text style={styles.addressContent}>Guaruja, SP</Text>
+        </View>
+      </View>
+      <View style={styles.footer}>
+        <RectButton style={styles.button} onPress={() => {}}></RectButton>
+      </View>
+    </>
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 32,
-    paddingTop: 20,
+    paddingTop: 20 + Constants.statusBarHeight,
   },
 
   pointImage: {
