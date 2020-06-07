@@ -16,6 +16,9 @@ interface Item {
 
 export default function Points() {
   const [items, setItems] = useState<Item[]>([]);
+  const [selectedItems, setSelectedItems] = useState<number[]>([]);
+
+  const navigation = useNavigation();
 
   useEffect(() => {
     api.get('items').then((response) => {
@@ -23,14 +26,25 @@ export default function Points() {
     });
   }, []);
 
-  const navigation = useNavigation();
-
   function handleNavigateBack() {
     navigation.goBack();
   }
 
   function handleNavigateToDetail() {
     navigation.navigate('Detail');
+  }
+
+  function handleSelectItem(id: number) {
+    const alreadySelected = selectedItems.findIndex((item) => item === id);
+
+    if (alreadySelected >= 0) {
+      const filteredItems = selectedItems.filter((item) => item !== id);
+
+      setSelectedItems(filteredItems);
+      return;
+    }
+
+    setSelectedItems([...selectedItems, id]);
   }
 
   return (
@@ -78,7 +92,12 @@ export default function Points() {
       <View style={styles.itemsContainer}>
         <ScrollView horizontal contentContainerStyle={{ paddingHorizontal: 20 }}>
           {items.map((item) => (
-            <TouchableOpacity style={styles.item} onPress={() => {}}>
+            <TouchableOpacity
+              activeOpacity={0.5}
+              key={String(item.id)}
+              style={[styles.item, selectedItems.includes(item.id) ? styles.selectedItem : {}]}
+              onPress={() => handleSelectItem(item.id)}
+            >
               <SvgUri width={42} height={42} uri={item.image_url} />
               <Text style={styles.itemTitle}>{item.title}</Text>
             </TouchableOpacity>
