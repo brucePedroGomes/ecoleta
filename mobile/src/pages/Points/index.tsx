@@ -1,10 +1,11 @@
 import React from 'react';
 import Constants from 'expo-constants';
 
-import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import { SvgUri } from 'react-native-svg';
+import { View, StyleSheet, TouchableOpacity, Text, ScrollView } from 'react-native';
 import { Feather as Icon } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import MapView from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 
 export default function Points() {
   const navigation = useNavigation();
@@ -14,18 +15,62 @@ export default function Points() {
   }
 
   return (
-    <View style={styles.container}>
-      <TouchableOpacity onPress={handleNavigateBack}>
-        <Icon name="arrow-left" size={20} color="#34cb79" />
-      </TouchableOpacity>
+    <>
+      <View style={styles.container}>
+        <TouchableOpacity onPress={handleNavigateBack}>
+          <Icon name="arrow-left" size={20} color="#34cb79" />
+        </TouchableOpacity>
 
-      <Text style={styles.title}>Bem vindo</Text>
-      <Text style={styles.description}>Encontre no mapa um ponto de coleta</Text>
+        <Text style={styles.title}>Bem vindo</Text>
+        <Text style={styles.description}>Encontre no mapa um ponto de coleta</Text>
 
-      <View style={styles.mapContainer}>
-        <MapView style={styles.map} />
+        <View style={styles.mapContainer}>
+          <MapView
+            style={styles.map}
+            initialRegion={{
+              latitude: -27.2092052,
+              longitude: -49.6401092,
+              latitudeDelta: 0.014,
+              longitudeDelta: 0.014,
+            }}
+          >
+            <Marker
+              coordinate={{
+                latitude: -27.2092052,
+                longitude: -49.6401092,
+              }}
+            ></Marker>
+          </MapView>
+        </View>
       </View>
-    </View>
+      <View style={styles.itemsContainer}>
+        <ScrollView horizontal contentContainerStyle={{ paddingHorizontal: 20 }}>
+          <TouchableOpacity style={styles.item} onPress={() => {}}>
+            <SvgUri width={42} height={42} uri="http://localhost:3333/uploads/baterias.svg" />
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.item} onPress={() => {}}>
+            <SvgUri width={42} height={42} uri="http://localhost:3333/uploads/baterias.svg" />
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.item} onPress={() => {}}>
+            <SvgUri width={42} height={42} uri="http://localhost:3333/uploads/baterias.svg" />
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.item} onPress={() => {}}>
+            <SvgUri width={42} height={42} uri="http://localhost:3333/uploads/baterias.svg" />
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.item} onPress={() => {}}>
+            <SvgUri width={42} height={42} uri="http://localhost:3333/uploads/baterias.svg" />
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.item} onPress={() => {}}>
+            <SvgUri width={42} height={42} uri="http://localhost:3333/uploads/baterias.svg" />
+          </TouchableOpacity>
+        </ScrollView>
+      </View>
+    </>
   );
 }
 
