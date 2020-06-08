@@ -42,6 +42,7 @@ const CreatePoint = () => {
   const [selectedCity, setSelectedCity] = useState('0');
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
   const [selectedPosition, setSelectedPosition] = useState<[number, number]>([0, 0]);
+
   const history = useHistory();
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {
